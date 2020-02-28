@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tennis Graphs</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <style>
+      h1 {
+        font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+          "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Year-end ATP Points</h1>
+    <canvas id="myChart" width="400" height="200"></canvas>
+    <script>
+      const years = [];
+      const pointsNovak = [];
+      const pointsRoger = [];
+      const pointsRafa = [];
+
+      const ctx = document.getElementById("myChart").getContext("2d");
+      const chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: "line",
+
+        // The data for our dataset
+        data: {
+          labels: years,
+          datasets: [
+            {
+              label: "Novak Djokovic",
+              backgroundColor: "#1B5CFF",
+              borderColor: "#1B5CFF",
+              data: pointsNovak,
+              fill: false
+            },
+            {
+              label: "Roger Federer",
+              backgroundColor: "#00FF00",
+              borderColor: "#00FF00",
+              data: pointsRoger,
+              fill: false
+            },
+            {
+              label: "Rafael Nadal",
+              backgroundColor: "#FF0000",
+              borderColor: "#FF0000",
+              data: pointsRafa,
+              fill: false
+            }
+          ]
+        },
+
+        // Configuration options go here
+        options: {}
+      });
+
+      async function getData() {
+        const response = await fetch("ATPPoints.csv");
+        const data = await response.text();
+        console.log(data);
+        const row = data.split("\n").slice(1);
+        // console.log(row);
+        row.forEach(year => {
+          const points = year.split(",");
+          // console.log(points);
+          years.push(points[0]);
+          pointsNovak.push(points[1]);
+          pointsRoger.push(points[2]);
+          pointsRafa.push(points[3]);
+        });
+      }
+      getData();
+    </script>
+  </body>
+</html>
